@@ -18,7 +18,7 @@ var autoSelectorCmd = &cobra.Command{
 	Short:   "randomly select string from a list",
 	Long:    `randomly select string from a list`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fileFlag, err := cmd.Flags().GetString("f")
+		fileFlag, err := cmd.Flags().GetString("file")
 		if err != nil {
 			cmd.Println("go error when parse file flag")
 			os.Exit(1)
@@ -54,5 +54,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// autoSelectorCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	autoSelectorCmd.Flags().String("f", "", "file path")
+	autoSelectorCmd.Flags().StringP("file", "f", "", "file path")
 }
