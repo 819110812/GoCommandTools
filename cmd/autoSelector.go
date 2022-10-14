@@ -6,6 +6,7 @@ package cmd
 
 import (
 	auto_selector "GoCommandTools/pkg/auto-selector"
+	file_parser "GoCommandTools/pkg/file-parser"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -17,8 +18,17 @@ var autoSelectorCmd = &cobra.Command{
 	Short:   "randomly select string from a list",
 	Long:    `randomly select string from a list`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			cmd.Println("please input a list of string")
+		fileFlag, err := cmd.Flags().GetString("f")
+		if err != nil {
+			cmd.Println("go error when parse file flag")
+			os.Exit(1)
+		}
+		if fileFlag != "" {
+			parser := file_parser.NewParser()
+			args, err = parser.Parse(fileFlag)
+		}
+		if len(args) == 0 && fileFlag == "" {
+			cmd.Println("please input a list of string or file path")
 			os.Exit(1)
 		}
 		res, err := auto_selector.AutoSelect(args)
@@ -26,7 +36,9 @@ var autoSelectorCmd = &cobra.Command{
 			cmd.Println("got error: ", err.Error())
 			os.Exit(1)
 		}
-		cmd.Println(res)
+		if len(res) > 0 {
+			cmd.Println(res)
+		}
 	},
 }
 
@@ -42,4 +54,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// autoSelectorCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	autoSelectorCmd.Flags().String("f", "", "file path")
 }
