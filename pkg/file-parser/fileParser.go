@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"os"
-	"strings"
 )
 
 type FileParser interface {
@@ -39,25 +38,4 @@ func (p *Parser) Parse(filePath string) ([]string, error) {
 
 func NewParser() *Parser {
 	return &Parser{}
-}
-
-func isTxtFile(filePath string) bool {
-	if strings.HasSuffix(filePath, ".txt") {
-		return true
-	}
-	return false
-}
-
-func isJsonFile(filePath string) bool {
-	if strings.HasSuffix(filePath, ".json") {
-		return true
-	}
-	return false
-}
-
-func isYamlFile(filePath string) bool {
-	if strings.HasSuffix(filePath, ".yaml") {
-		return true
-	}
-	return false
 }
